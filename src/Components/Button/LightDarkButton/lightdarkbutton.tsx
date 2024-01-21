@@ -1,4 +1,4 @@
-import {useMantineColorScheme, useComputedColorScheme, ActionIcon} from "@mantine/core"
+import {useMantineColorScheme, useComputedColorScheme, ActionIcon, Tooltip} from "@mantine/core"
 import { IconSun, IconMoon } from '@tabler/icons-react';
 
 import cx from 'clsx';
@@ -17,10 +17,16 @@ export function LightDarkButton()
             onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
             variant="default"
             size="xl"
+            radius="md"
             aria-label="Toggle color scheme"
         >
-            <IconSun className={cx(classes.icon, classes.light)} stroke={1.5} />
-            <IconMoon className={cx(classes.icon, classes.dark)} stroke={1.5} />
+            <Tooltip label="Light Mode" offset={15}>
+                <IconSun className={cx(classes.icon, classes.light)} stroke={1.5} />
+            </Tooltip>
+
+            <Tooltip label="Dark Mode" offset={15}>
+                <IconMoon className={cx(classes.icon, classes.dark)} stroke={1.5} />
+            </Tooltip>
         </ActionIcon>
     );
 }

@@ -31,9 +31,13 @@
     "clsx": "^2.1.0",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^7.1.0",
+    "localforage": "^1.10.0",
+    "match-sorter": "^6.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "recharts": "^2.10.4"
+    "react-router-dom": "^6.21.3",
+    "recharts": "^2.10.4",
+    "sort-by": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
