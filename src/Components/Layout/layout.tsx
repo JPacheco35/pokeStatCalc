@@ -37,6 +37,12 @@ export function Layout() {
             {/*Bottom Page Footer Section*/}
             <AppShell.Footer>
                 Footer
+                {/*const handleClick = (color) => { setColor(color); };*/}
+
+                {/*const swatches = Object.keys(theme.colors).map((color) => (*/}
+                {/*<ColorSwatch key={color} component={UnstyledButton} color={theme.colors[color][5]} onClick={() => handleClick(color)}>*/}
+                {/*    {(theme.primaryColor === color) && <CheckIcon width={10} />}*/}
+                {/*</ColorSwatch>*/}
             </AppShell.Footer>
 
         </AppShell>

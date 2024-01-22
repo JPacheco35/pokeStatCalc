@@ -13,6 +13,7 @@ import { useDisclosure } from '@mantine/hooks';
 
 // Import CSS
 import classes from "./navbarheader.module.css"
+import {ColorButton} from "../../Button/ColorButton/colorbutton.tsx";
 
 export function NavBarHeader()
 {
@@ -84,6 +85,7 @@ export function NavBarHeader()
                     <Tabs.Tab value={"tab5"} ml={"auto"}>
                         <Group>
                             <GitHubButton/>
+                            <ColorButton/>
                             <LightDarkButton/>
                         </Group>
                     </Tabs.Tab>
