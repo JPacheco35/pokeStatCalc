@@ -62,7 +62,7 @@ export function NavBarHeader()
 
                     <Tabs.Tab value={"tab3"}>
                         <Title order={1} >
-                            Pokemon Stat Calculator
+                            Temp
                         </Title>
                     </Tabs.Tab>
 

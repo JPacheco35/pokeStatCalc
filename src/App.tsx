@@ -3,6 +3,7 @@ import './App.css'
 import '@mantine/core/styles.css';
 import { createTheme, MantineProvider } from '@mantine/core';
 import { Layout } from "./Components/Layout/layout.tsx"
+import {BrowserRouter} from "react-router-dom";
 
 
 // Theme Styles for Everything in the App
@@ -20,9 +21,11 @@ const theme = createTheme({
 function App()
 {
     return (
-    <MantineProvider theme={theme} defaultColorScheme={"dark"}>
-        <Layout></Layout>
-    </MantineProvider>
+        <BrowserRouter>
+            <MantineProvider theme={theme} defaultColorScheme={"dark"}>
+                <Layout></Layout>
+            </MantineProvider>
+        </BrowserRouter>
   )
 }
 export default App

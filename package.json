@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "exports": "./index.js",
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -28,11 +32,15 @@
     "@tiptap/extension-link": "^2.1.16",
     "@tiptap/react": "^2.1.16",
     "@tiptap/starter-kit": "^2.1.16",
+    "@types/pokedex-promise-v2": "github:mudkipme/pokeapi-v2-typescript",
     "clsx": "^2.1.0",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^7.1.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.3",
+    "pokeapi-js-wrapper": "^1.2.3",
+    "pokeapi-typescript": "^2.1.0",
+    "pokedex-promise-v2": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.3",
@@ -40,6 +48,7 @@
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
+    "@types/node": "^20.11.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
