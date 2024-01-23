@@ -1,20 +1,70 @@
-import {Grid, Group, Image, NumberInput, rem, Stack} from "@mantine/core";
-import {SpeciesForm} from "./SpeciesForm/speciesform.tsx";
+import {Autocomplete, Grid, Group, Image, NumberInput, rem, Stack} from "@mantine/core";
+import gen1Names from "./gen1Names.json";
 
 // Import PokeAPI Pokedex
 import PokeAPI from "pokeapi-typescript";
+import {useEffect, useState} from "react";
 
 // const value = PokeAPI.Pokemon.list(10,33);
-const value = await PokeAPI.Pokemon.fetch("pikachu");
-console.log(value);
-
-const sprite = value["sprites"]["versions"]["generation-v"]["black-white"]["animated"].front_default;
-console.log(sprite);
+const value = await PokeAPI.Pokemon.fetch("bulbasaur");
+const initialSprite = value["sprites"]["versions"]["generation-v"]["black-white"]["animated"].front_default
 
 
 // Part of Form with Species and Level
 export function PokeLevelForm()
 {
+    const [value, setValue] = useState('');
+    const [species, setSpecies] = useState('');
+    const [sprite, setSprite] = useState(initialSprite);
+
+    useEffect(() => {
+        console.log("value="+value);
+    }, [value]);
+
+    useEffect(() => {
+        console.log("species="+species);
+    }, [species]);
+
+    useEffect(() => {
+        console.log("value1="+value);
+        console.log("species1="+species);
+        console.log("sprite="+sprite);
+
+        // const pokemon = PokeAPI.Pokemon.resolve(species)
+
+        PokeAPI.Pokemon.fetch(species).then(pokemon => {
+            console.log(pokemon['sprites']);
+            console.log(pokemon["sprites"]["versions"]["generation-v"]["black-white"]["animated"].front_default);
+            setSprite(pokemon["sprites"]["versions"]["generation-v"]["black-white"]["animated"].front_default);
+
+        });
+
+        // console.log(newPokemon);
+        // setSprite(newPokemon["sprites"]["versions"]["generation-v"]["black-white"]["animated"].front_default)
+
+        // const newPokemon = PokeAPI.Pokemon.fetch(species.toLowerCase());
+        // console.log(newPokemon);
+        //
+        // setSprite(newPokemon["sprites"]["versions"]["generation-v"]["black-white"]["animated"].front_default)
+        // console.log(sprite)
+    }, [sprite]);
+
+
+    const onValueChange = (e) => {
+        var temp = e
+        setValue(temp)
+        console.log(e)
+        // console.log("value="+value)
+    };
+    const onSpeciesChange = (e) => {
+        // console.log(e)
+        var temp = e
+        setValue(temp)
+        setSpecies(temp.toLowerCase())
+        setSprite()
+        console.log(e)
+    };
+
     return(
         <Group>
             <Stack
@@ -33,9 +83,21 @@ export function PokeLevelForm()
 
                 <Grid grow justify={"center"}>
                     <Grid.Col span={4}>
-                        <SpeciesForm
-                            data={['Abra','Ditto','Seel','Voltorb']}
-                            // data={['Archen','Drifloon','Seviper','Tinkatuff']}
+                        <Autocomplete
+                            withScrollArea={true}
+                            comboboxProps={{ transitionProps: { transition: 'pop', duration: 200 } }}
+                            label="Species"
+                            defaultValue="Bulbasaur"
+                            placeholder="Species"
+                            data={gen1Names.names}
+                            value={value}
+                            // onChange={onValueChange}
+                            onChange={e => {
+                                onValueChange(e);
+                            }}
+                            onOptionSubmit={e => {
+                                onSpeciesChange(e);
+                            }}
                         />
                     </Grid.Col>
 
