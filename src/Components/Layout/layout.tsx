@@ -16,6 +16,8 @@ export function Layout() {
             navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
             aside={{ width: 300, breakpoint: 'md', collapsed: { desktop: false, mobile: true } }}
             padding="md"
+            transitionDuration={500}
+            transitionTimingFunction="ease"
             // layout={"alt"}
         >
 
