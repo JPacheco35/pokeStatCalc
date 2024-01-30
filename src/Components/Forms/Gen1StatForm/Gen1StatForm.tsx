@@ -8,7 +8,7 @@ import {hpStat,attackStat,defenceStat,speedStat,specialStat} from "./gen1Stats.j
 
 // default on load is lvl 5 bulbasaur
 const value = await PokeAPI.Pokemon.fetch("bulbasaur");
-// @ts-ignore
+//@ts-expect-error Code Breaks Otherwise
 const initialSprite = value["sprites"]["versions"]["generation-v"]["black-white"]["animated"].front_default
 
 // hidden power types
@@ -31,6 +31,19 @@ const HPTypes = [
     'Dark'
 ]
 
+type Stats = {
+    HP: number|string;
+    ATK: number|string;
+    DEF: number|string;
+    SPD: number|string;
+    SPC: number|string;
+};
+
+type hiddenPower = {
+    type:string;
+    power:string|number;
+};
+
 
 // entire gen1 stat calc form
 export function Gen1StatForm()
@@ -42,35 +55,30 @@ export function Gen1StatForm()
     const [sprite, setSprite] = useState(initialSprite);
 
     // user entered pokemon level [1-100]
-    const [level, setLevel] = useState<string|number>(5);
+    const [level, setLevel] = useState<number>(5);
 
     // base stats of pokemon species selected
     const [baseStats,setBaseStats] = useState<number[]>([45,49,49,45,65])
 
     // user entered pokemon IVs
-    const [IV, setIV] = useState({HP:0, ATK:0, DEF:0, SPD:0, SPC:0});
+    const [IV, setIV] = useState<Stats>({HP:0, ATK:0, DEF:0, SPD:0, SPC:0});
 
     // user entered pokemon EVs
-    const [EV, setEV] = useState({HP:0, ATK:0, DEF:0, SPD:0, SPC:0});
+    const [EV, setEV] = useState<Stats>({HP:0, ATK:0, DEF:0, SPD:0, SPC:0});
 
     // final calculated pokemon stats
-    const [finalStats, setfinalStats] = useState<number|string>({HP:'-', ATK:'-', DEF:'-', SPD:'-', SPC:'-'});
+    const [finalStats, setfinalStats] = useState<Stats>({HP:'-', ATK:'-', DEF:'-', SPD:'-', SPC:'-'});
 
     // calculated hidden power typing and base power
-    const [hiddenPower, sethiddenPower] = useState<number|string>({type:'', power:''});
+    const [hiddenPower, sethiddenPower] = useState<hiddenPower>({type:'', power:''});
 
 
     // when user changes IV value, reset value to 0 if input is blank
     useEffect(() => {
-        // @ts-ignore
         if(IV.HP == '') {IV.HP = 0}
-        // @ts-ignore
         if(IV.ATK == '') {IV.ATK = 0}
-        // @ts-ignore
         if(IV.DEF == '') {IV.DEF = 0}
-        // @ts-ignore
         if(IV.SPD == '') {IV.SPD = 0}
-        // @ts-ignore
         if(IV.SPC == '') {IV.SPC = 0}
         // console.log(IV.HP+","+IV.ATK+","+IV.DEF+","+IV.SPD+","+IV.SPC);
     }, [IV]);
@@ -78,15 +86,10 @@ export function Gen1StatForm()
 
     // when user changes EV value, reset value to 0 if input is blank
     useEffect(() => {
-        // @ts-ignore
         if(EV.HP == '') {EV.HP = 0}
-        // @ts-ignore
         if(EV.ATK == '') {EV.ATK = 0}
-        // @ts-ignore
         if(EV.DEF == '') {EV.DEF = 0}
-        // @ts-ignore
         if(EV.SPD == '') {EV.SPD = 0}
-        // @ts-ignore
         if(EV.SPC == '') {EV.SPC = 0}
         // console.log(EV.HP+","+EV.ATK+","+EV.DEF+","+EV.SPD+","+EV.SPC);
     }, [EV]);
@@ -114,20 +117,21 @@ export function Gen1StatForm()
         // grab PokeAPI baseStats and new Sprite, and update those respective values
         PokeAPI.Pokemon.fetch(value.toLowerCase()).then(pokemon => {
             setBaseStats([hpStat[pokemon.id-1],attackStat[pokemon.id-1],defenceStat[pokemon.id-1],speedStat[pokemon.id-1],specialStat[pokemon.id-1]])
-            // @ts-ignore
+
+            // @ts-expect-error Breaks Otherwise
             setSprite(pokemon["sprites"]["versions"]["generation-v"]["black-white"]["animated"].front_default);
         });
     }, [sprite]);
 
 
     // Update pokemon species value on value change
-    const onValueChange = ({e}: { e: any }) => {
+    const onValueChange = ({e}: { e: string }) => {
         setValue(e)
     };
 
 
     // Update species value, sprite when option is selected, reset finalStats and hiddenPower values
-    const onSpeciesChange = ({e}: { e: any }) => {
+    const onSpeciesChange = ({e}: { e: string }) => {
         setValue(e)
         setSprite(e)
         setfinalStats({HP:'-',ATK:'-',DEF:'-',SPD:'-',SPC:'-'})
@@ -137,18 +141,18 @@ export function Gen1StatForm()
 
     // Runs when the user clicks the 'Calculate Stats' Button,
     // Performs Stat and Hidden Power Calculation
-    const handleSubmit = ({e}: { e: any }) => {
+    const handleSubmit = () => {
 
-        var finalStats=[0,0,0,0,0]
-        var inputIV = [IV.HP,IV.ATK,IV.DEF,IV.SPD,IV.SPC]
-        var inputEV = [EV.HP,EV.ATK,EV.DEF,EV.SPD,EV.SPC]
+        const finalStats = [0, 0, 0, 0, 0];
+        const inputIV = [IV.HP,IV.ATK,IV.DEF,IV.SPD,IV.SPC]
+        const inputEV = [EV.HP,EV.ATK,EV.DEF,EV.SPD,EV.SPC]
 
         // Calculate each of the final stats using Gen I and II formula
         // See https://bulbapedia.bulbagarden.net/wiki/Stat for equation
         for (let i = 0; i <= 4; i++)
         {
-            finalStats[i] = ((baseStats[i]+inputIV[i])*2)
-            finalStats[i] += Math.floor(Math.sqrt(inputEV[i])/4)
+            finalStats[i] = ((baseStats[i] + (inputIV[i] as number))*2)
+            finalStats[i] += Math.floor(Math.sqrt((inputEV[i] as number))/4)
             finalStats[i] *= level
             finalStats[i] /= 100
             finalStats[i] = Math.floor(finalStats[i])
@@ -163,19 +167,19 @@ export function Gen1StatForm()
 
         // Calculate hidden power typing using Gen I and II formula
         // See https://bulbapedia.bulbagarden.net/wiki/Hidden_Power_(move)/Calculation for full equation
-        var hiddenPowerType = (inputIV[1] & 3)
+        let hiddenPowerType = ((inputIV[1] as number) & 3)
         hiddenPowerType *= 4
-        hiddenPowerType += inputIV[2]%4
+        hiddenPowerType += (inputIV[2] as number)%4
         // console.log(type)
         // console.log("HP Type = "+HPTypes[type])
 
         // get Most Significant Bit of each of the Non-HP Stat
-        var MSB = [0,0,0,0]
-        for (let i= 1; i<=4; i++) { MSB[i-1] = (inputIV[i]<8) ? 0:1 }
+        const MSB = [0, 0, 0, 0];
+        for (let i= 1; i<=4; i++) { MSB[i-1] = ((inputIV[i] as number)<8) ? 0:1 }
 
         // Calculate hidden power Base Power using Gen I and II formula
         // See https://bulbapedia.bulbagarden.net/wiki/Hidden_Power_(move)/Calculation for full equation
-        var hiddenPowerPower = 0
+        let hiddenPowerPower = 0;
         hiddenPowerPower += (4 * (MSB[1]))
         hiddenPowerPower += (2 * (MSB[2]))
         hiddenPowerPower += (MSB[3])
@@ -231,6 +235,7 @@ export function Gen1StatForm()
                             {/*Level Selector*/}
                             <NumberInput
                                 value={level}
+                                // @ts-expect-error Breaks otherwise
                                 onChange={setLevel}
                                 size="xs"
                                 radius="md"

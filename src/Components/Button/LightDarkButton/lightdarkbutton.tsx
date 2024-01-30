@@ -21,11 +21,13 @@ export function LightDarkButton()
             aria-label="Toggle color scheme"
         >
             <Tooltip label="Light Mode" offset={15}>
-                <IconSun className={cx(classes.icon, classes.light)} stroke={1.5} />
+                <IconSun className={cx(classes.icon, classes.light)} stroke={1.5}
+                display={computedColorScheme=='dark'?'block':'none'}/>
             </Tooltip>
 
             <Tooltip label="Dark Mode" offset={15}>
-                <IconMoon className={cx(classes.icon, classes.dark)} stroke={1.5} />
+                <IconMoon className={cx(classes.icon, classes.dark)} stroke={1.5}
+                display={computedColorScheme=='dark'?'none':'block'}/>
             </Tooltip>
         </ActionIcon>
     );
